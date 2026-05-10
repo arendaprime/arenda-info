@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArendaPrime</title>
+<!-- EmailJS CDN - replace keys after signup at dashboard.emailjs.com -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function() {
+      emailjs.init('WqsuWO9xFDY-hAOEl'); // Replace with your EmailJS Public Key
+   })();
+</script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+}
+header {
+    background: #222;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+section {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+h2 {
+    margin-bottom: 20px;
+}
+.services, .advantages {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+button {
+    padding: 10px 20px;
+    border: none;
+    background: orange;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+button:hover {
+    background: #e68a00;
+}
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.submit-btn {
+    background: orange;
+    color: white;
+    width: 100%;
+}
+
+/* Map block */
+.map-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+.map-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+.map-iframe {
+    width: 100%;
+    height: 360px;
+    border: 0;
+    border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .map-wrap {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .services, .advantages {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>ArendaPrime</h1>
+    <p>Аренда строительной техники и ремонт оборудования</p>
+    <button id="requestBtn">Оставить заявку</button>
+</header>
+
+<section>
+    <h2>О компании</h2>
+    <p>Мы предоставляем в аренду инструмент для бытового и строительного применения и выполняем ремонт любой сложности.</p>
+</section>
+
+<section>
+    <h2>Услуги</h2>
+    <div class="services">
+        <div class="card">
+            <h3>Аренда техники</h3>
+            <p>Перфораторы, Бетономешалки, покрасочное оборудовани и т.п</p>
+        </div>
+        <div class="card">
+            <h3>Ремонт</h3>
+            <p>Диагностика, Обслуживание, Выездной ремонт</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Преимущества</h2>
+    <div class="advantages">
+        <div class="card">Собственный инструмент</div>
+        <div class="card">Быстрая оформление</div>
+        <div class="card">Опытные мастера</div>
+        <div class="card">Честные цены</div>
+    </div>
+</section>
+
+<!-- Address map section -->
+<section name="dispositon">
+    <h2>Как нас найти</h2>
+    <div class="map-wrap">
+        <div class="map-card">
+            <p style="margin-top:0; font-weight:bold;">Адрес:</p>
+            <p style="margin-top:0;">г. Минск, ул. Жилуновича 7, 1 этаж, пом. 27</p>
+            
+        </div>
+        <!-- Google Maps embed with marker at provided coordinates -->
+        <iframe
+            class="map-iframe"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=53%C2%B052'%2052.6%22N%2027%C2%B038'%2029.1%22E&amp;z=15&amp;t=m&amp;output=embed">
+        </iframe>
+    </div>
+</section>
+
+<!-- Modal Form -->
+<div id="requestModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Оставить заявку</h2>
+<form id="requestForm">
+            <!-- Honeypot anti-spam (bots often fill hidden fields) -->
+            <div style="display:none;">
+                <label for="company">Компания</label>
+                <input type="text" id="company" name="company" autocomplete="off" tabindex="-1">
+            </div>
+
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Телефон:</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Сообщение:</label>
+                <textarea id="message" rows="4"></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Отправить</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p><h2>Контакты</h2></p>
+    <p><a href="tel:+375339040990" style="color: inherit;">Телефон: +375 (33) 904-09-90</a></p>
+    <p><a href="mailto:arendaprime.09@gmail.com" style="color: inherit;">Email: arendaprime.09@gmail.com</a></p>
+    <p>© ArendaPrime</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('requestModal');
+    const btn = document.getElementById('requestBtn');
+    const span = document.getElementsByClassName('close')[0];
+    const form = document.getElementById('requestForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    btn.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+form.onsubmit = function(e) {
+        e.preventDefault();
+        const nameEl = document.getElementById('name');
+        const phoneEl = document.getElementById('phone');
+        const messageEl = document.getElementById('message');
+
+        // Honeypot anti-spam (should remain empty)
+        const honeypotEl = document.getElementById('company');
+        const honeypot = (honeypotEl && honeypotEl.value ? honeypotEl.value : '').trim();
+        if (honeypot) {
+            alert('Ошибка отправки.');
+            return;
+        }
+
+        // 1) Limits
+        let name = (nameEl.value || '').trim().slice(0, 80);
+        let phone = (phoneEl.value || '').trim().slice(0, 30);
+        let message = (messageEl.value || '').trim().slice(0, 1000) || 'Без сообщения';
+
+        // 2) Sanitizing: remove angle brackets
+        const sanitize = (s) => s.replace(/[<>]/g, '');
+        name = sanitize(name);
+        phone = sanitize(phone);
+        message = sanitize(message);
+
+
+        console.log('Заявка:', {name, phone, message});
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Отправка...';
+
+// Замените YOUR_SERVICE_ID на реальный Service ID в EmailJS
+emailjs.send('service_iegz3wr', 'template_kl5ec7l', {
+            from_name: name,
+            from_phone: phone,
+            message: message,
+            to_email: 'info@arendaprime.ru'
+        }).then(function(response) {
+            alert('Заявка успешно отправлена на почту! Мы свяжемся с вами.');
+            form.reset();
+            modal.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Отправить';
+        }, function(error) {
+            console.error('EmailJS error:', error);
+            alert('Ошибка отправки. Попробуйте позже или используйте email.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Отправить';
+        });
+    }
+});
+</script>
+
+</body>
+</html>
